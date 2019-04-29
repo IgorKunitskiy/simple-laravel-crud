@@ -27,7 +27,7 @@ class ClientController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
         ]);
 
         $id = Client::where([
@@ -41,14 +41,15 @@ class ClientController extends Controller
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $client = Client::find($id);
+        $client = Client::where('id', '=', $id)->where('deleted', '!=', 1)->get();
 
         return response()->json($client);
     }
 
     public function getClients ()
     {
-        $clients = Client::where(['deleted', '!=', 0]);
+        $clients = Client::where('deleted', '!=', 1)->get();
+        // $clients = Client::all();
 
         return response()->json($clients);
     }

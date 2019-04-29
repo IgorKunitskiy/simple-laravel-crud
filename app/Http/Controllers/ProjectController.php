@@ -13,9 +13,20 @@ class ProjectController extends Controller
 
     public function createProject (Request $request)
     {
-        $data = $this->validateData($request);
+        $validate = Validator::make($request->all(), [
+            'id' => 'numeric|min:1|max:255',
+            'name' => 'required|string|min:1|max:255',
+            'description' => 'required|string|min:1|max:4000',
+            'status' => 'required|min:2|max:255',
+        ]);
 
-        $id = $this->updateCreateProject($data);
+        if($validate->fails()){
+            return response()->json($validate->errors());
+        } else if (!in_array ($request->status, $this->statuses)) {
+            return response()->json(['error' => 'incorrect status']);
+        }
+
+        $id = $this->updateCreateProject($request);
 
         return response($id, 200)->header('Content-Type', 'text/plain');
     }
@@ -24,21 +35,32 @@ class ProjectController extends Controller
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $project = Project::find($id);
+        $project = Project::where('id', '=', $id)->where('deleted', '!=', 1)->get();
 
         return response()->json($project);
     }
 
     public function getProjects ()
     {
-        $projects = Project::where(['deleted', '!=', 0]);
+        $projects = Project::where('deleted', '!=', 1)->get();
 
         return response()->json($projects);
     }
 
     public function updateProject (Request $request)
     {
-        $data = $this->validateData($request);
+        $validate = Validator::make($request->all(), [
+            'id' => 'numeric|min:1|max:255',
+            'name' => 'required|string|min:1|max:255',
+            'description' => 'required|string|min:1|max:4000',
+            'status' => 'required|min:2|max:255',
+        ]);
+
+        if($validate->fails()){
+            return response()->json($validate->errors());
+        } else if (!in_array ($request->status, $this->statuses)) {
+            return response()->json(['error' => 'incorrect status']);
+        }
 
         $id = $this->updateCreateProject($data);
 
@@ -60,27 +82,15 @@ class ProjectController extends Controller
         return response()->json(['status' => 'done']);
     }
 
-    private function validateData ($data)
-    {
-        $validate = Validator::make($request->all(), [
-            'id' => 'numeric|min:1|max:255',
-            'name' => 'required|string|min:1|max:255',
-            'description' => 'required|string|min:1|max:1',
-            'status' => 'required|min:2|max:255',
-        ]);
-
-        if($validate->fails()){
-            return response()->json($validate->errors());
-        } else if (!in_array ($request->status, $this->$statuses)) {
-            return response()->json(['error' => 'incorrect status']);
-        }
-
-        return $data;
-    }
-
     private function updateCreateProject ($data)
     {
-        $project = Project::updateOrCreate(['id' => $data['id'], $data]);
+        $project = Project::updateOrCreate(
+          ['id' => $data->id],[
+            'name' => $data->name,
+            'description' => $data->description,
+            'status' => $data->status,
+          ]
+        );
 
         $id = Project::where([
             'updated_at' => $project->updated_at, 'status' => $project->status
