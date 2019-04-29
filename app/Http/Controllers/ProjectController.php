@@ -28,14 +28,15 @@ class ProjectController extends Controller
 
         $id = $this->updateCreateProject($request);
 
-        return response($id, 200)->header('Content-Type', 'text/plain');
+        return response()->json(['project' => $id]);
+
     }
 
     public function getProject (Request $request)
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $project = Project::where('id', '=', $id)->where('deleted', '!=', 1)->get();
+        $project = Project::where('id', '=', $id)->where('deleted', '!=', 1)->get()->first();
 
         return response()->json($project);
     }
@@ -67,17 +68,17 @@ class ProjectController extends Controller
         return response()->json(['id' => $id]);
     }
 
-    public function deleteProject (Request $request)
+    public function removeProject (Request $request)
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $project = Project::find($id);
+        $project = Project::where('id', '=', $id)->where('deleted', '=', 0)->get()->first();
 
         if ($project === null) {
             return response()->json(['status' => 'not_found']);
         }
 
-        $this->updateCreateProject (['id' => $id, 'deleted' => 1]);
+        Project::where('id', '=', $id)->update(['deleted' => 1]);
 
         return response()->json(['status' => 'done']);
     }

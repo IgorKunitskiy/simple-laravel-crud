@@ -41,7 +41,7 @@ class ClientController extends Controller
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $client = Client::where('id', '=', $id)->where('deleted', '!=', 1)->get();
+        $client = Client::where('id', '=', $id)->where('deleted', '!=', 1)->get()->first();
 
         return response()->json($client);
     }
@@ -58,7 +58,7 @@ class ClientController extends Controller
     {
         $id = preg_replace('#[^0-9]#', '', $request->id);
 
-        $client = Client::find($id);
+        Client::where('id', '=', $id)->where('deleted', '!=', 1)->get()->first();
 
         if ($client === null) {
             return response()->json(['status' => 'not_found']);
