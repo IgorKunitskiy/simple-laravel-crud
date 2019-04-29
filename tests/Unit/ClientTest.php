@@ -16,7 +16,6 @@ class ClientTest extends TestCase
     use WithFaker;
 
     /**
-     * A basic test example.
      *
      * @return void
      */
@@ -54,8 +53,8 @@ class ClientTest extends TestCase
     public function testClientRemove ()
     {
       $client = factory(Client::class)->create();
-      $data = ['deleted' => 1];
+      $data = ['deleted' => 1, 'id' => $client->id];
       $this->post(route('client.remove', $client->id), $data)
-          ->assertStatus(200)->assertJson(['status' => 'not_found']);
+          ->assertStatus(200)->assertJson(['status' => 'done']);
     }
 }
