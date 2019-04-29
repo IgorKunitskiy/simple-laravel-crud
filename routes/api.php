@@ -17,13 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/client-create', 'ClientController@createClient');
-Route::get('/client', 'ClientController@getClient');
-Route::get('/clients-all', 'ClientController@getClients');
-Route::post('/client-remove', 'ClientController@removeClient');
+Route::post('/client-create', 'ClientController@createClient')->name('client.create');
+Route::get('/client', 'ClientController@getClient')->name('client.show');
+Route::get('/clients-all', 'ClientController@getClients')->name('client.show_all');
+Route::post('/client-remove', 'ClientController@removeClient')->name('client.remove');
 
-Route::post('/project-create', 'ProjectController@createProject');
-Route::get('/project', 'ProjectController@getProject');
-Route::get('/project-all', 'ProjectController@getProjects');
-Route::post('/project-update', 'ProjectController@updateProject');
-Route::post('/project-remove', 'ProjectController@removeProject');
+Route::post('/project-create', 'ProjectController@createProject')->name('project.create');
+Route::get('/project', 'ProjectController@getProject')->name('project.show');
+Route::get('/project-all', 'ProjectController@getProjects')->name('project.show_all');
+Route::post('/project-update', 'ProjectController@updateProject')->name('project.update');
+Route::post('/project-remove', 'ProjectController@removeProject')->name('project.remove');
