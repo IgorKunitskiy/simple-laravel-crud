@@ -21,6 +21,6 @@ $factory->define(App\Project::class, function (Faker $faker) {
         'name' => $faker->realText(20),
         'description' => $faker->realText(200),
         'status' => $statuses[mt_rand(0, 4)],
-        'deleted' => mt_rand(0, 1),
+        // 'deleted' => mt_rand(0, 1),
     ];
 });

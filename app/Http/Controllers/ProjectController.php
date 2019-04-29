@@ -51,7 +51,7 @@ class ProjectController extends Controller
     public function updateProject (Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'id' => 'numeric|min:1|max:255',
+            'id' => 'required|numeric|min:1|max:255',
             'name' => 'required|string|min:1|max:255',
             'description' => 'required|string|min:1|max:4000',
             'status' => 'required|min:2|max:255',
@@ -60,7 +60,7 @@ class ProjectController extends Controller
         if($validate->fails()){
             return response()->json($validate->errors());
         } else if (!in_array ($request->status, $this->statuses)) {
-            return response()->json(['error' => 'incorrect status']);
+            return response()->json(['error' => 'incorrect status'], 500);
         }
 
         $id = $this->updateCreateProject($data);
