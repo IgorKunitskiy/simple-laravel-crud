@@ -19,6 +19,7 @@ class CreateClientsTable extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->string('password');
+            $table->integer('deleted', 1)->default(0);
             $table->timestamps();
         });
     }

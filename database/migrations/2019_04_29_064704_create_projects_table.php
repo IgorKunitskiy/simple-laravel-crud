@@ -18,6 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('status', 50);
+            $table->integer('deleted', 1)->default(0);
             $table->timestamps();
         });
     }
