@@ -40,7 +40,7 @@ class ProjectController extends Controller
 
         $id = $this->updateCreateProject($data);
 
-        return response($id, 200)->header('Content-Type', 'text/plain');
+        return response()->json(['id' => $id]);
     }
 
     public function deleteProject (Request $request)
@@ -50,12 +50,12 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if ($project === null) {
-            return response('not_found', 200)->header('Content-Type', 'text/plain');
+            return response()->json(['status' => 'not_found']);
         }
 
         $this->updateCreateProject (['id' => $id, 'deleted' => 1]);
 
-        return response('done', 200)->header('Content-Type', 'text/plain');
+        return response()->json(['status' => 'done']);
     }
 
     private function validateData ($data)
