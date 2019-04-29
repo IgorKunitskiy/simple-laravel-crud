@@ -19,6 +19,7 @@ $factory->define(App\Client::class, function (Faker $faker) {
         'lastname' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'deleted' => mt_rand(0, 1),
+        // 'deleted' => mt_rand(0, 1),
+        'deleted' => 0,
     ];
 });
