@@ -9,6 +9,8 @@ use App\Project;
 
 class ProjectController extends Controller
 {
+    private $statuses = ['planned', 'running', 'on hold', 'finished', 'cancel'];
+
     public function createProject (Request $request)
     {
         $data = $this->validateData($request);
@@ -69,6 +71,8 @@ class ProjectController extends Controller
 
         if($validate->fails()){
             return response()->json($validate->errors());
+        } else if (!in_array ($request->status, $this->$statuses)) {
+            return response()->json(['error' => 'incorrect status']);
         }
 
         return $data;
