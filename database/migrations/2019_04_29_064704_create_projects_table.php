@@ -16,9 +16,9 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description');
+            $table->string('description',4000);
             $table->string('status', 50);
-            $table->integer('deleted', 1)->default(0);
+            $table->tinyInteger('deleted')->default(0);
             $table->timestamps();
         });
     }
