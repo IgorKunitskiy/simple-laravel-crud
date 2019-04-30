@@ -31,12 +31,20 @@ class ClientTest extends TestCase
         $this->post(route('client.create'), $data)->assertJson(['id' => true]);
     }
 
+    /**
+     *
+     * @return void
+     */
     public function testClientShow ()
     {
         $client = factory(Client::class)->create();
         $this->get(route('client.show', $client->id))->assertStatus(200);
     }
 
+    /**
+     *
+     * @return void
+     */
     public function testClientShowAll ()
     {
         $clients = factory(Client::class, 10)->create()->map(function ($client) {
@@ -50,6 +58,10 @@ class ClientTest extends TestCase
         ]);
     }
 
+    /**
+     *
+     * @return void
+     */
     public function testClientRemove ()
     {
       $client = factory(Client::class)->create();

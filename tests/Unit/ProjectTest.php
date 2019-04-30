@@ -84,8 +84,8 @@ class ProjectTest extends TestCase
     public function testProjectRemove ()
     {
         $project = factory(Project::class)->create();
-        $data = ['deleted' => 1];
+        $data = ['deleted' => 1, 'id' => $project->id];
         $this->post(route('project.remove', $project->id), $data)
-            ->assertStatus(200)->assertJson(['status' => 'not_found']);
+            ->assertStatus(200)->assertJson(['status' => 'done']);
     }
 }
