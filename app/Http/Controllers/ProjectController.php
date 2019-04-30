@@ -23,7 +23,7 @@ class ProjectController extends Controller
         if($validate->fails()){
             return response()->json($validate->errors());
         } else if (!in_array ($request->status, $this->statuses)) {
-            return response()->json(['error' => 'incorrect status']);
+            return response()->json(['error' => 'incorrect status', 500]);
         }
 
         $id = $this->updateCreateProject($request);

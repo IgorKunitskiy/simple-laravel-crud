@@ -68,5 +68,7 @@ class ClientTest extends TestCase
       $data = ['deleted' => 1, 'id' => $client->id];
       $this->post(route('client.remove', $client->id), $data)
           ->assertStatus(200)->assertJson(['status' => 'done']);
+      $this->post(route('project.remove', $client->id), $data)
+          ->assertStatus(200)->assertJson(['status' => 'not_found']);
     }
 }

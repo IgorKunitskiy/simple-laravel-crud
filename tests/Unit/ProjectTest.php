@@ -24,12 +24,20 @@ class ProjectTest extends TestCase
     public function testProjectCreated()
     {
         $data = [
-            'name' => $this->faker->name,
-            'description' => $this->faker->name,
+            'name' => $this->faker->realText(20),
+            'description' => $this->faker->realText(200),
             'status' => $this->statuses[mt_rand(0, 4)],
         ];
 
         $this->post(route('project.create'), $data)->assertJson(['project' => true]);
+
+        $data = [
+            'name' => $this->faker->name,
+            'description' => $this->faker->name,
+            'status' => 'eeeee',
+        ];
+
+        $this->post(route('project.create'), $data)->assertJson(['error' => 'incorrect status']);
     }
 
 
@@ -48,6 +56,17 @@ class ProjectTest extends TestCase
 
         $this->post(route('project.update', $project->id), $data)
             ->assertStatus(200)->assertJson(['id' => true]);
+
+        $project = factory(Project::class)->create();
+
+        $data = [
+            'id' => $project->id,
+            'name' => $this->faker->realText(20),
+            'description' => $this->faker->realText(200),
+            'status' => 'eeeee',
+        ];
+
+        $this->post(route('project.update', $project->id), $data)->assertJson(['error' => 'incorrect status']);
     }
 
     /**
@@ -87,5 +106,8 @@ class ProjectTest extends TestCase
         $data = ['deleted' => 1, 'id' => $project->id];
         $this->post(route('project.remove', $project->id), $data)
             ->assertStatus(200)->assertJson(['status' => 'done']);
+
+        $this->post(route('project.remove', $project->id), $data)
+            ->assertStatus(200)->assertJson(['status' => 'not_found']);
     }
 }
